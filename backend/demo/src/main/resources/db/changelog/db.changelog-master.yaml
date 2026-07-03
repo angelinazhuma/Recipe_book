@@ -1,0 +1,25 @@
+databaseChangeLog: # zdes nahodjtsa izmenenija bazi daniih
+  - changeSet:
+      id: 001-create-recipes
+      author: angelina
+      changes:
+        - createTable:
+            tableName: recipes
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true # уникально едля каждого рецепта
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
