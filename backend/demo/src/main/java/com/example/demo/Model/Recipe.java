@@ -1,27 +1,35 @@
-package com.example.demo.Model
+package com.example.demo.Model;
 
 // описывает рецепт, соотвествует таблице в базе данных,
 // спринг бут и jta используют этот класс для соханения и получения рецептов из базы данных
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity //говорит йаве что класс связан с таблицей в базе
 @Table(name = "recipes")
 public class Recipe {
     @Id
-    @GenerateValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private string name;
-    private string author;
+    private String name;
+    private String author;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    private String ingredients;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {
+        this.createdAt = LocalDateTime.now();
 
     }
 
-    public Recipe(String name, String author, String ingredients) {
+    public Recipe(String name, String author, List<Ingredient> ingredients) {
         this.name = name;
         this.author = author;
         this.ingredients = ingredients;
@@ -36,15 +44,15 @@ public class Recipe {
         return createdAt;
     }
 
-    public String getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public string getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public string getName() {
+    public String getName() {
         return name;
     }
 
@@ -52,7 +60,7 @@ public class Recipe {
         this.id = id;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -60,11 +68,11 @@ public class Recipe {
         this.createdAt = createdAt;
     }
 
-    public void setAuthor(string author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public void setName(string name) {
+    public void setName(String name) {
         this.name = name;
     }
 }

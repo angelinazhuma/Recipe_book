@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql1://localhost:5432/recipebook #java технологий которая позволяет программе общатся с базой данныз
+    url: jdbc:postgresql://localhost:5432/recipe_book #java технологий которая позволяет программе общатся с базой данныз
     username: postgres
     password: postgres
 
@@ -9,5 +9,5 @@ spring:
       ddl-auto: validate # создание таблиц, проверяет существует ли таблица
     show-sql: true
 
-  liquibase:
+  Liquibase:
     change-log: classpath:db\changelog/db.changelog-master.yaml
