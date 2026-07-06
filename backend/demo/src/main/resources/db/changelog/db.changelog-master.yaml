@@ -23,3 +23,6 @@ databaseChangeLog: # zdes nahodjtsa izmenenija bazi daniih
                   name: created_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: ingredients
+                  type: VARCHAR(1000)
