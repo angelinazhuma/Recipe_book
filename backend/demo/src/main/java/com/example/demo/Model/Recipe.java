@@ -17,6 +17,7 @@ public class Recipe {
 
     private String name;
     private String author;
+    private String recipeDescription;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -34,6 +35,15 @@ public class Recipe {
         this.author = author;
         this.ingredients = ingredients;
         this.createdAt = LocalDateTime.now();
+        this.recipeDescription = recipeDescription;
+    }
+
+    public String getRecipeDescription() {
+        return recipeDescription;
+    }
+
+    public void setRecipeDescription(String recipeDescription) {
+        this.recipeDescription = recipeDescription;
     }
 
     public Long getId() {

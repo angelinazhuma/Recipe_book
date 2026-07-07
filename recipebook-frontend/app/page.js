@@ -9,6 +9,7 @@ export default function Home() {
 
     const [name, setName] = useState("");
     const [author, setAuthor] = useState("");
+    const [recipeDescription, setRecipeDecription] = useState("");
     const [ingredientFields, setIngredientFields] = useState([
         { name: "", amount: "", unit: "" },
     ]);
@@ -106,6 +107,13 @@ export default function Home() {
                             value={author}
                             onChange={(e) => setAuthor(e.target.value)}
                         />
+
+                        <input
+                            type={"text"}
+                            placeholder={RecipeDescription}
+                            value={name}
+                            onChange={(e) => setRecipeDecription(e.target.value)}
+                            />
 
                         <h3>Ingredients</h3>
 
