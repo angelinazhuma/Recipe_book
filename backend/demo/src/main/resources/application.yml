@@ -9,5 +9,5 @@ spring:
       ddl-auto: validate # создание таблиц, проверяет существует ли таблица
     show-sql: true
 
-  Liquibase:
-    change-log: classpath:db\changelog/db.changelog-master.yaml
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml

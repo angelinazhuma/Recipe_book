@@ -188,4 +188,14 @@ button {
   .ingredient-row {
     grid-template-columns: 1fr;
   }
+  .recipe-description {
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+  textarea {
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    min-height: 120px;
+  }
 }

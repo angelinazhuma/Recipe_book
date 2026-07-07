@@ -30,12 +30,12 @@ public class Recipe {
 
     }
 
-    public Recipe(String name, String author, List<Ingredient> ingredients) {
+    public Recipe(String name, String author, String recipeDescription, List<Ingredient> ingredients) {
         this.name = name;
         this.author = author;
+        this.recipeDescription = recipeDescription;
         this.ingredients = ingredients;
         this.createdAt = LocalDateTime.now();
-        this.recipeDescription = recipeDescription;
     }
 
     public String getRecipeDescription() {

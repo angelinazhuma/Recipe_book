@@ -9,7 +9,7 @@ export default function Home() {
 
     const [name, setName] = useState("");
     const [author, setAuthor] = useState("");
-    const [recipeDescription, setRecipeDecription] = useState("");
+    const [recipeDescription, setRecipeDescription] = useState("");
     const [ingredientFields, setIngredientFields] = useState([
         { name: "", amount: "", unit: "" },
     ]);
@@ -17,7 +17,11 @@ export default function Home() {
     // Загрузить все рецепты
     const loadRecipes = async () => {
         const res = await fetch(`${apiUrl}/recipes`);
+        console.log("GET status:", res.status);
+
         const data = await res.json();
+        console.log("GET data:", data);
+
         setRecipes(data);
     };
 
@@ -50,6 +54,7 @@ export default function Home() {
             body: JSON.stringify({
                 name,
                 author,
+                recipeDescription,
                 ingredients: ingredientFields.map((ingredient) => ({
                     name: ingredient.name,
                     amount: Number(ingredient.amount),
@@ -68,6 +73,7 @@ export default function Home() {
 
         setName("");
         setAuthor("");
+        setRecipeDescription("");
         setIngredientFields([{ name: "", amount: "", unit: "" }]);
 
         await loadRecipes();
@@ -79,7 +85,7 @@ export default function Home() {
             method: "DELETE",
         });
 
-        loadRecipes();
+        await loadRecipes();
     };
 
     return (
@@ -108,12 +114,16 @@ export default function Home() {
                             onChange={(e) => setAuthor(e.target.value)}
                         />
 
-                        <input
-                            type={"text"}
-                            placeholder={RecipeDescription}
-                            value={name}
-                            onChange={(e) => setRecipeDecription(e.target.value)}
-                            />
+                        <textarea
+                            placeholder="Recipe Description"
+                            value={recipeDescription}
+                            rows={4}
+                            onChange={(e) => {
+                                setRecipeDescription(e.target.value);
+                                e.target.style.height = "auto";
+                                e.target.style.height = e.target.scrollHeight + "px";
+                            }}
+                        />
 
                         <h3>Ingredients</h3>
 
@@ -177,6 +187,10 @@ export default function Home() {
 
                                 <p>
                                     <span className="label">Author:</span> {recipe.author}
+                                </p>
+
+                                <p className="recipe-description">
+                                    <span className="label">Description:</span> {recipe.recipeDescription}
                                 </p>
 
                                 <p>
