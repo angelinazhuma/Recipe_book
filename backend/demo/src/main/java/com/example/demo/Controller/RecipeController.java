@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * Controller принимает HTTP-запросы
- * и вызывает методы Service.
+ * Controller принимает HTTP-запросы и вызывает методы Service.
  */
 
 @RestController
