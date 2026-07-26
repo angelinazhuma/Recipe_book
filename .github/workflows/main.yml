@@ -15,10 +15,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
-          distribution: temurin
+          distribution: temurin # тemurin бесплатная сборка Java
           java-version: "21"
-          cache: maven
-          cache-dependency-path: backend/demo/pom.xml
 
       - name: Start database
         run: docker compose up -d db
@@ -52,7 +50,7 @@ jobs:
           exit 1
 
       - name: Check frontend
-        run: curl --retry 10 --retry-delay 3 --retry-connrefused -f http://localhost:3000
+        run: curl http://localhost:3000
 
       - name: Check database
         run: docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "\dt"'
