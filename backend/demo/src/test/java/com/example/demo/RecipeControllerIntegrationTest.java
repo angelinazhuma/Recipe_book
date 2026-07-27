@@ -15,26 +15,34 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
-
+// загружает только веб-часть приложения и тестирует RecipeController. база данных, репозитории и обычные сервисы при этом не запускаются.
 @WebMvcTest(RecipeController.class)
 class RecipeControllerIntegrationTest {
 
+    // MockMvc позволяет отправлять тестовые HTTP-запросы без запуска настоящего веб-сервера.
     @Autowired
     private MockMvc mockMvc;
 
+    // создаёт поддельный объект RecipeService, контроллер будет использовать этот mock вместо настоящего сервиса.
     @MockitoBean
     private RecipeService service;
 
+    // проверяет GET /recipes — получение всех рецептов
     @Test
     void getAllRecipesReturnsRecipes() throws Exception {
+
+        // создаём тестовый рецепт
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Pizza");
         recipe.setAuthor("Angelina");
 
-        Mockito.when(service.getAllRecipes()).thenReturn(List.of(recipe));
+        // указываем поведение mock-сервиса: когда контроллер вызовет getAllRecipes(),
+        // сервис должен вернуть список с созданным рецептом.
+        Mockito.when(service.getAllRecipes())
+                .thenReturn(List.of(recipe));
 
+        // выполняем GET-запрос по адресу /recipes.
         mockMvc.perform(MockMvcRequestBuilders.get("/recipes"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))

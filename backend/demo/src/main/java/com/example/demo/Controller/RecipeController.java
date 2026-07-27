@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * Controller принимает HTTP-запросы и вызывает методы Service.
+ * сontroller принимает HTTP-запросы и вызывает методы Service
  */
 
 @RestController
@@ -17,28 +17,27 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 public class RecipeController {
 
-    @Autowired // спринг автоматически созжает обьет recipeservice и помещает его сюда
+    @Autowired // спринг автоматически создает обьет recipeservice и помещает его сюда
     private RecipeService service;
 
-    // Получить все рецепты
+    // получить все рецепты
     @GetMapping // получение всез рецептов
     public List<Recipe> getAllRecipes() {
         return service.getAllRecipes();
     }
 
-    // Получить рецепт по id
+    // получить рецепт по id
     @GetMapping("/{id}") // получение рецепта по id
     public Optional<Recipe> getRecipeById(@PathVariable Long id) {
         return service.getRecipeById(id);
     }
 
-    // Добавить новый рецепт
+    // добавить новый рецепт
     @PostMapping // создание рецепта
     public Recipe saveRecipe(@RequestBody Recipe recipe) {
         return service.saveRecipe(recipe);
     }
 
-    // Удалить рецепт
     @DeleteMapping("/{id}")
     public void deleteRecipe(@PathVariable Long id) {
         service.deleteRecipe(id);

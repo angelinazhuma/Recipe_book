@@ -23,6 +23,7 @@ public class Recipe {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    // один рецепт, может содержать много ингредиентов, связб описнаан в классе ингелридент, операци с рецептом применятеся к из ингрединетам, удаленные з списка ингредиенты удаляеются из бд
     private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {

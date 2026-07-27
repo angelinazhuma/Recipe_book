@@ -9,6 +9,7 @@ import com.example.demo.Model.Ingredient;
 import java.util.List;
 import java.util.Optional;
 
+// этот класс работает с базой данных
 @Service
 public class RecipeService {
     @Autowired
