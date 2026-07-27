@@ -72,8 +72,36 @@ export default function Home() {
         );
     };
 
-    // добавляет новый рецепт.
+    // добавляет новый рецепт
     const addRecipe = async () => {
+
+        if(!name.trim()) {
+            alert("Enter recipe name");
+            return;
+        }
+
+        if(!author.trim()) {
+            alert("Enter author name");
+            return;
+        }
+
+        if(!recipeDescription.trim()) {
+            alert("Enter recipe decription");
+            return;
+        }
+
+        for (const ingredient of ingredientFields) {
+            if (
+                !ingredient.name.trim() ||
+                ingredient.amount === "" ||
+                !ingredient.unit.trim()
+
+            ) {
+                alert("Fill in all ingredient fields");
+                return;
+            }
+        }
+
 
         // отправляем POST-запрос на backend
         const res = await fetch(`${apiUrl}/recipes`, {
@@ -111,7 +139,7 @@ export default function Home() {
             return;
         }
 
-        // после успешного сохранения очищаем форму.
+        // после успешного сохранения очищаем форму
         setName("");
         setAuthor("");
         setRecipeDescription("");
@@ -121,14 +149,14 @@ export default function Home() {
             { name: "", amount: "", unit: "" },
         ]);
 
-        // повторно загружаем список чтобы новый рецепт появился на странице.
+        // повторно загружаем список чтобы новый рецепт появился на странице
         await loadRecipes();
     };
 
-    // удаляет рецепт по его id.
+    // удаляет рецепт по его id
     const deleteRecipe = async (id) => {
 
-        // отправляем DELETE-запрос.
+        // отправляем DELETE-запрос
         await fetch(`${apiUrl}/recipes/${id}`, {
             method: "DELETE",
         });

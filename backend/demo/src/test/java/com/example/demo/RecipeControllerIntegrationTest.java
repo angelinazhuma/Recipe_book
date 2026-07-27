@@ -15,6 +15,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 // загружает только веб-часть приложения и тестирует RecipeController. база данных, репозитории и обычные сервисы при этом не запускаются.
 @WebMvcTest(RecipeController.class)
 class RecipeControllerIntegrationTest {
@@ -44,7 +49,7 @@ class RecipeControllerIntegrationTest {
 
         // выполняем GET-запрос по адресу /recipes.
         mockMvc.perform(MockMvcRequestBuilders.get("/recipes"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Pizza"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].author").value("Angelina"));
@@ -60,7 +65,7 @@ class RecipeControllerIntegrationTest {
         Mockito.when(service.getRecipeById(1L)).thenReturn(Optional.of(recipe));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipes/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Soup"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.author").value("Angelina"));
@@ -76,7 +81,7 @@ class RecipeControllerIntegrationTest {
         Mockito.when(service.saveRecipe(org.mockito.ArgumentMatchers.any(Recipe.class)))
                 .thenReturn(savedRecipe);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/recipes")
+        mockMvc.perform(post("/recipes")
                         .contentType("application/json")
                         .content("""
                                 {
@@ -85,7 +90,7 @@ class RecipeControllerIntegrationTest {
                                   "ingredients": []
                                 }
                                 """))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Pasta"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.author").value("Angelina"));
@@ -94,8 +99,28 @@ class RecipeControllerIntegrationTest {
     @Test
     void deleteRecipeDeletesRecipe() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/recipes/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(status().isOk());
 
-        Mockito.verify(service).deleteRecipe(1L);
+        verify(service).deleteRecipe(1L);
     }
+    @Test
+    void shouldNotSaveEmptyRecipe() throws Exception {
+        String emptyRecipe = """
+                {
+                    "name": "",
+                    "author": "",
+                    "description": ""
+                }
+                """;
+
+        mockMvc.perform(post("/recipes")
+                        .contentType("application/json")
+                        .content(emptyRecipe))
+                .andExpect(status().isBadRequest());
+
+        verify(service, never()).saveRecipe(
+                org.mockito.ArgumentMatchers.any()
+        );
+    }
+
 }

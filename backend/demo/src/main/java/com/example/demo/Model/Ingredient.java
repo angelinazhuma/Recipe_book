@@ -2,6 +2,9 @@ package com.example.demo.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "ingredients")
@@ -11,8 +14,14 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Ingredient name is required")
     private String name;
+
+    @NotNull(message = "Amount is required")
+    @Positive
     private Double amount;
+
+    @NotBlank(message = "Unit is required")
     private String unit;
 
     @ManyToOne

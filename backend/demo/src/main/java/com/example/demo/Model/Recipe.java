@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.validation.constraints.NotBlank;
 
 
 @Entity //говорит йаве что класс связан с таблицей в базе
@@ -15,8 +16,14 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @NotBlank(message = "Recipe name is required")
     private String name;
+
+    @NotBlank(message = "Author name is required")
     private String author;
+
+    @NotBlank(message = "Recipe Description name is required")
     private String recipeDescription;
 
     @Column(name = "created_at")
@@ -86,4 +93,6 @@ public class Recipe {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }
