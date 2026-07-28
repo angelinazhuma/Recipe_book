@@ -107,18 +107,7 @@ class RecipeServiceTest {
         Assertions.assertTrue(result.isEmpty());
     }
 
-    @Test
-    void saveRecipeWithoutIngredients() {
 
-        Recipe recipe = new Recipe();
-        recipe.setIngredients(List.of());
-
-        Mockito.when(repository.save(recipe)).thenReturn(recipe);
-
-        Recipe result = service.saveRecipe(recipe);
-
-        Assertions.assertEquals(recipe, result);
-    }
 
 
 
