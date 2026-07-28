@@ -8,10 +8,9 @@ const apiUrl = "http://localhost:8080";
 
 export default function Home() {
 
-    // список рецептов, полученных с backend
+    // состояние для списка рецептов, изначально сипсок пустой, после получения с бэка сюда записываются рецепты
     const [recipes, setRecipes] = useState([]);
 
-    // поля формы нового рецепта
     const [name, setName] = useState("");
     const [author, setAuthor] = useState("");
     const [recipeDescription, setRecipeDescription] = useState("");
@@ -21,10 +20,10 @@ export default function Home() {
         { name: "", amount: "", unit: "" },
     ]);
 
-    // загружает все рецепты с backend
+    // асинхронная функция
     const loadRecipes = async () => {
 
-        // отправляем GET-запрос на /recipes.
+        // отправляем http запрос
         const res = await fetch(`${apiUrl}/recipes`);
 
         // выводим HTTP-статус в консоль браузера
@@ -58,7 +57,14 @@ export default function Home() {
     };
 
     // добавляет новую пустую строку ингредиента
+    const MAX_INGREDIENTS = 10;
+
     const addIngredientField = () => {
+        if (ingredientFields.length >= MAX_INGREDIENTS) {
+            alert("You can add a maximum of 10 ingredients.");
+            return;
+        }
+
         setIngredientFields([
             ...ingredientFields,
             { name: "", amount: "", unit: "" },
@@ -86,7 +92,7 @@ export default function Home() {
         }
 
         if(!recipeDescription.trim()) {
-            alert("Enter recipe decription");
+            alert("Enter recipe description");
             return;
         }
 

@@ -88,6 +88,12 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.13</version>
 
+				<configuration>
+					<excludes>
+						<exclude>com/example/demo/DemoApplication.class</exclude>
+					</excludes>
+				</configuration>
+
 				<executions>
 					<execution>
 						<goals>
