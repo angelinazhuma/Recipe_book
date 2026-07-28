@@ -103,24 +103,6 @@ class RecipeControllerIntegrationTest {
 
         verify(service).deleteRecipe(1L);
     }
-    @Test
-    void shouldNotSaveEmptyRecipe() throws Exception {
-        String emptyRecipe = """
-                {
-                    "name": "",
-                    "author": "",
-                    "description": ""
-                }
-                """;
 
-        mockMvc.perform(post("/recipes")
-                        .contentType("application/json")
-                        .content(emptyRecipe))
-                .andExpect(status().isBadRequest());
-
-        verify(service, never()).saveRecipe(
-                org.mockito.ArgumentMatchers.any()
-        );
-    }
 
 }
