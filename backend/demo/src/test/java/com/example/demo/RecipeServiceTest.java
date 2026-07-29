@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,52 +29,79 @@ class RecipeServiceTest {
     @InjectMocks
     private RecipeService service;
 
-    /*
-     * getAllRecipes()
-     */
 
+
+    // getAllRecipes()
     @Test
-    void getAllRecipesReturnsRecipesFromRepository() {
-        Recipe recipe = createRecipe(
-                1L,
-                "Sandwich",
-                "John"
-        );
+    void getAllRecipesReturnsEmptyListWhenRepositoryEmpty() {
+       Mockito.when(repository.findAll())
+               .thenReturn(Collections.emptyList());
 
-        Mockito.when(repository.findAll())
-                .thenReturn(List.of(recipe));
+       List<RecipeResponseDTO> result = service.getAllRecipes();
 
-        List<RecipeResponseDTO> result = service.getAllRecipes();
-
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals(1L, result.get(0).getId());
-        Assertions.assertEquals("Sandwich", result.get(0).getName());
-        Assertions.assertEquals("John", result.get(0).getAuthor());
-        Assertions.assertEquals(
-                "Test description",
-                result.get(0).getRecipeDescription()
-        );
-        Assertions.assertEquals(
-                "Salt",
-                result.get(0).getIngredients().get(0).getName()
-        );
-
-        Mockito.verify(repository).findAll();
-    }
-
-    @Test
-    void getAllRecipesReturnsEmptyList() {
-        Mockito.when(repository.findAll())
-                .thenReturn(List.of());
-
-        List<RecipeResponseDTO> result = service.getAllRecipes();
-
+        Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
 
         Mockito.verify(repository).findAll();
     }
 
-    // GetRecipebyId()
+    @Test
+    void getAllRecipesReturnsAllRecipesFromRepository() {
+        Recipe firstRecipe = createRecipe(
+                15L,
+                "Pasta",
+                "Angelina"
+
+        );
+
+        Recipe secondRecipe = createRecipe(
+                84L,
+                "Random soup",
+                "Random author"
+        );
+
+        Mockito.when(repository.findAll())
+                .thenReturn(List.of(firstRecipe, secondRecipe));
+
+        List<RecipeResponseDTO> result = service.getAllRecipes();
+        Assertions.assertEquals(2, result.size());
+
+        RecipeResponseDTO firstResult = result.get(0);
+
+        Assertions.assertEquals(15L, firstResult.getId());
+        Assertions.assertEquals("Pasta", firstResult.getName());
+        Assertions.assertEquals("Angelina", firstResult.getAuthor());
+        Assertions.assertEquals(
+                "Italian pasta",
+                firstResult.getRecipeDescription()
+        );
+
+        Assertions.assertEquals(1, firstResult.getIngredients().size());
+        Assertions.assertEquals(
+                "Salt",
+                firstResult.getIngredients().get(0).getName()
+        );
+        Assertions.assertEquals(
+                5.0,
+                firstResult.getIngredients().get(0).getAmount()
+        );
+        Assertions.assertEquals(
+                "g",
+                firstResult.getIngredients().get(0).getUnit()
+        );
+
+        RecipeResponseDTO secondResult = result.get(1);
+
+        Assertions.assertEquals(84L, secondResult.getId());
+        Assertions.assertEquals("Random soup", secondResult.getName());
+        Assertions.assertEquals(
+                "Random author",
+                secondResult.getAuthor()
+        );
+
+        Mockito.verify(repository).findAll();
+    }
+
 
     @Test
     void getRecipeByIdReturnsRecipeWhenRecipeExists() {
