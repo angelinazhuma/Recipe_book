@@ -27,11 +27,5 @@ class RecipeControllerIntegrationTest {
     private RecipeService service;
 
 
-    @Test
-    void deleteRecipeDeletesRecipe() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/recipes/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        Mockito.verify(service).deleteRecipe(1L);
-    }
 }

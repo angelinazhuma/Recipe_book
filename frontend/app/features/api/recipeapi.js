@@ -1,3 +1,5 @@
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+
 const API_URL = "http://localhost:8080";
 
 // GET /recipes

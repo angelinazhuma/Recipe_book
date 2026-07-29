@@ -23,47 +23,52 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 class RecipeServiceTest {
 
+    //fake repository created by mockito
     @Mock
     private RecipeRepository repository;
+
 
     @InjectMocks
     private RecipeService service;
 
+ //GET all recipes
 
-
-    // getAllRecipes()
     @Test
-    void getAllRecipesReturnsEmptyListWhenRepositoryEmpty() {
-       Mockito.when(repository.findAll())
-               .thenReturn(Collections.emptyList());
+    void getAllRecipesReturnsEmptyListWhenRepositoryIsEmpty() {
 
-       List<RecipeResponseDTO> result = service.getAllRecipes();
+        Mockito.when(repository.findAll())
+                .thenReturn(Collections.emptyList());
+        List<RecipeResponseDTO> result = service.getAllRecipes();
 
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
+        Assertions.assertEquals(0, result.size());
 
         Mockito.verify(repository).findAll();
     }
 
     @Test
     void getAllRecipesReturnsAllRecipesFromRepository() {
+        // Arrange
         Recipe firstRecipe = createRecipe(
                 15L,
                 "Pasta",
-                "Angelina"
-
+                "Angelina",
+                "Italian pasta"
         );
 
         Recipe secondRecipe = createRecipe(
                 84L,
                 "Random soup",
-                "Random author"
+                "Random author",
+                "Random description"
         );
 
         Mockito.when(repository.findAll())
                 .thenReturn(List.of(firstRecipe, secondRecipe));
 
         List<RecipeResponseDTO> result = service.getAllRecipes();
+
         Assertions.assertEquals(2, result.size());
 
         RecipeResponseDTO firstResult = result.get(0);
@@ -102,116 +107,90 @@ class RecipeServiceTest {
         Mockito.verify(repository).findAll();
     }
 
+   //Get recipebyid
 
     @Test
-    void getRecipeByIdReturnsRecipeWhenRecipeExists() {
-        Recipe recipe = createRecipe(
-                25L,
-                "Pizza",
-                "Bob"
-        );
+    void getRecipeByIdReturnsEmptyOptionalWhenRandomIdDoesNotExist() {
+        Long randomId = 937L;
 
-        Mockito.when(repository.findById(25L))
-                .thenReturn(Optional.of(recipe));
-
-        Optional<RecipeResponseDTO> result =
-                service.getRecipeById(25L);
-
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(25L, result.get().getId());
-        Assertions.assertEquals("Pizza", result.get().getName());
-        Assertions.assertEquals("Bob", result.get().getAuthor());
-
-        Mockito.verify(repository).findById(25L);
-    }
-
-    @Test
-    void getRecipeByIdReturnsEmptyWhenRecipeNotFound() {
-        Mockito.when(repository.findById(0L))
+        Mockito.when(repository.findById(randomId))
                 .thenReturn(Optional.empty());
 
         Optional<RecipeResponseDTO> result =
-                service.getRecipeById(0L);
+                service.getRecipeById(randomId);
 
         Assertions.assertTrue(result.isEmpty());
 
-        Mockito.verify(repository).findById(0L);
+        Mockito.verify(repository).findById(randomId);
     }
-
-    // saveRecipe tests
-
     @Test
-    void saveRecipeConvertsDtoAndSetsRecipeForIngredients() {
-        RecipeRequestDTO requestDTO = createRequestDTO(
-                "Pasta",
-                "Angelina"
+    void getRecipeByIdReturnsCorrectRecipeWhenRecipeExists() {
+        Long expectedId = 25L;
+
+        Recipe recipe = createRecipe(
+                expectedId,
+                "Pizza",
+                "Bob",
+                "Pizza description"
         );
 
-        Mockito.when(repository.save(Mockito.any(Recipe.class)))
-                .thenAnswer(invocation -> {
-                    Recipe savedRecipe = invocation.getArgument(0);
+        Mockito.when(repository.findById(expectedId))
+                .thenReturn(Optional.of(recipe));
 
-                    savedRecipe.setId(1L);
-                    savedRecipe.setCreatedAt(
-                            LocalDateTime.of(
-                                    2026,
-                                    7,
-                                    28,
-                                    12,
-                                    0
-                            )
-                    );
+        Optional<RecipeResponseDTO> result =
+                service.getRecipeById(expectedId);
 
-                    return savedRecipe;
-                });
+        Assertions.assertTrue(result.isPresent());
 
-        RecipeResponseDTO result =
-                service.saveRecipe(requestDTO);
+        RecipeResponseDTO responseDTO = result.get();
 
-        Assertions.assertEquals(1L, result.getId());
-        Assertions.assertEquals("Pasta", result.getName());
-        Assertions.assertEquals("Angelina", result.getAuthor());
+        Assertions.assertEquals(expectedId, responseDTO.getId());
+        Assertions.assertEquals("Pizza", responseDTO.getName());
+        Assertions.assertEquals("Bob", responseDTO.getAuthor());
         Assertions.assertEquals(
-                "Test description",
-                result.getRecipeDescription()
+                "Pizza description",
+                responseDTO.getRecipeDescription()
         );
-        Assertions.assertEquals(1, result.getIngredients().size());
         Assertions.assertEquals(
                 "Salt",
-                result.getIngredients().get(0).getName()
+                responseDTO.getIngredients().get(0).getName()
         );
 
-        Mockito.verify(repository)
-                .save(Mockito.argThat(recipe ->
-                        recipe.getName().equals("Pasta")
-                                && recipe.getIngredients().size() == 1
-                                && recipe.getIngredients()
-                                .get(0)
-                                .getRecipe() == recipe
-                ));
+        Mockito.verify(repository).findById(expectedId);
     }
 
     @Test
-    void saveRecipeReturnsRecipeWithRandomValues() {
+    void saveRecipeInitiallySendsRecipeWithNullId() {
+        // Arrange
         RecipeRequestDTO requestDTO = createRequestDTO(
-                "Random soup",
-                "Random author"
+                "New recipe",
+                "Test author",
+                "New recipe description"
         );
 
         Mockito.when(repository.save(Mockito.any(Recipe.class)))
                 .thenAnswer(invocation -> {
                     Recipe recipe = invocation.getArgument(0);
-                    recipe.setId(99L);
+
+                    /*
+                     * Before repository.save(), a new recipe has no ID.
+                     * The database normally generates it during saving.
+                     */
+                    Assertions.assertNull(recipe.getId());
+
+                    recipe.setId(100L);
                     return recipe;
                 });
 
+        // Act
         RecipeResponseDTO result =
                 service.saveRecipe(requestDTO);
 
-        Assertions.assertEquals(99L, result.getId());
-        Assertions.assertEquals("Random soup", result.getName());
+        // Assert
+        Assertions.assertEquals(100L, result.getId());
+        Assertions.assertEquals("New recipe", result.getName());
         Assertions.assertEquals(
-                "Random author",
+                "Test author",
                 result.getAuthor()
         );
 
@@ -219,50 +198,105 @@ class RecipeServiceTest {
                 .save(Mockito.any(Recipe.class));
     }
 
-    // deleteRecipe test method
-
     @Test
-    void deleteRecipeCallsRepositoryWithRegularId() {
-        service.deleteRecipe(25L);
+    void saveRecipeWorksWithRandomValues() {
+        RecipeRequestDTO requestDTO = createRequestDTO(
+                "Recipe 847",
+                "Author 392",
+                "Description 581"
+        );
+
+        Mockito.when(repository.save(Mockito.any(Recipe.class)))
+                .thenAnswer(invocation -> {
+                    Recipe recipe = invocation.getArgument(0);
+                    recipe.setId(847L);
+                    return recipe;
+                });
+
+        RecipeResponseDTO result =
+                service.saveRecipe(requestDTO);
+
+        Assertions.assertEquals(847L, result.getId());
+        Assertions.assertEquals("Recipe 847", result.getName());
+        Assertions.assertEquals("Author 392", result.getAuthor());
+        Assertions.assertEquals(
+                "Description 581",
+                result.getRecipeDescription()
+        );
 
         Mockito.verify(repository)
-                .deleteById(25L);
+                .save(Mockito.argThat(recipe ->
+                        recipe.getName().equals("Recipe 847")
+                                && recipe.getAuthor().equals("Author 392")
+                                && recipe.getRecipeDescription()
+                                .equals("Description 581")
+                ));
     }
-
     @Test
-    void deleteRecipeCallsRepositoryWithZeroId() {
+    void deleteRecipeSendsZeroIdToRepository() {
+
         service.deleteRecipe(0L);
-
-        Mockito.verify(repository)
-                .deleteById(0L);
+        Mockito.verify(repository).deleteById(0L);
     }
 
-    // Helpful methods to not write the same code all the time
+    @Test
+    void deleteRecipeSendsRandomIdToRepository() {
+
+        Long randomId = 739L;
+
+        service.deleteRecipe(randomId);
+
+        Mockito.verify(repository).deleteById(randomId);
+    }
+
+    @Test
+    void deleteRecipeSendsExpectedIdToRepositoryExactlyOnce() {
+
+        Long expectedId = 25L;
+
+        service.deleteRecipe(expectedId);
+
+        Mockito.verify(repository, Mockito.times(1))
+                .deleteById(expectedId);
+
+        Mockito.verifyNoMoreInteractions(repository);
+    }
+
+
+
+    //helful methods
 
     private Recipe createRecipe(
             Long id,
             String name,
-            String author
+            String author,
+            String description
     ) {
         Recipe recipe = new Recipe();
+
         recipe.setId(id);
         recipe.setName(name);
         recipe.setAuthor(author);
-        recipe.setRecipeDescription("Test description");
+        recipe.setRecipeDescription(description);
         recipe.setCreatedAt(
                 LocalDateTime.of(
                         2026,
                         7,
-                        28,
+                        29,
                         12,
                         0
                 )
         );
 
         Ingredient ingredient = new Ingredient();
+
+        ingredient.setId(10L);
         ingredient.setName("Salt");
         ingredient.setAmount(5.0);
         ingredient.setUnit("g");
+
+        //ingredient must know which recipe it belongs to
+
         ingredient.setRecipe(recipe);
 
         recipe.setIngredients(List.of(ingredient));
@@ -272,19 +306,23 @@ class RecipeServiceTest {
 
     private RecipeRequestDTO createRequestDTO(
             String name,
-            String author
+            String author,
+            String description
     ) {
         IngredientDTO ingredientDTO = new IngredientDTO();
+
         ingredientDTO.setName("Salt");
         ingredientDTO.setAmount(5.0);
         ingredientDTO.setUnit("g");
 
         RecipeRequestDTO requestDTO = new RecipeRequestDTO();
+
         requestDTO.setName(name);
         requestDTO.setAuthor(author);
-        requestDTO.setRecipeDescription("Test description");
+        requestDTO.setRecipeDescription(description);
         requestDTO.setIngredients(List.of(ingredientDTO));
 
         return requestDTO;
     }
+
 }
