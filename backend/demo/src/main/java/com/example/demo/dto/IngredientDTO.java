@@ -1,5 +1,6 @@
-package com.example.demo.Model;
+package com.example.demo.dto;
 
+import com.example.demo.Model.Recipe;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "ingredients")
-public class Ingredient {
+public class IngredientDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +34,11 @@ public class Ingredient {
     @JsonIgnore
     private Recipe recipe;
 
-    public Ingredient() {
+
+    public IngredientDTO() {
     }
 
-    public Ingredient(String name, Double amount, String unit) {
+    public IngredientDTO(String name, Double amount, String unit) {
         this.name = name;
         this.amount = amount;
         this.unit = unit;

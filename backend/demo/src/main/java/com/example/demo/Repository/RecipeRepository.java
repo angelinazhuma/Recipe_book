@@ -4,11 +4,10 @@ import com.example.demo.Model.Recipe; // имопртируем класс ре�
 import org.springframework.data.jpa.repository.JpaRepository; //благодаря этому сразу получаем метожы
 import org.springframework.stereotype.Repository;
 
+// repository works with database, spring automatically makes all methods for saving and deleting recipes
 
-// репозиторий отвечает за работу с базой данных, спринг автоматически создает все методы
-// для сохранения и удаления и поиска рецептов
 
-@Repository // сообщает спринг что это класс который работает с базой данных
+@Repository // this tells spring that this class works with db
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 }
 

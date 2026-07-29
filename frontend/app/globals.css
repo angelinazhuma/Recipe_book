@@ -205,3 +205,10 @@ textarea {
   background: #fffdf9;
   transition: 0.2s;
 }
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 25px;
+}

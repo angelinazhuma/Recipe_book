@@ -40,4 +40,5 @@ class RecipeModelTest {
 
         Assertions.assertEquals(createdAt, recipe.getCreatedAt());
     }
+
 }

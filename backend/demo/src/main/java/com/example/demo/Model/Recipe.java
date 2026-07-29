@@ -2,13 +2,19 @@ package com.example.demo.Model;
 
 // описывает рецепт, соотвествует таблице в базе данных,
 // спринг бут и jta используют этот класс для соханения и получения рецептов из базы данных
+import com.example.demo.dto.IngredientDTO;
+import com.example.demo.dto.RecipeRequestDTO;
+import com.example.demo.dto.RecipeResponseDTO;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 @Entity //говорит йаве что класс связан с таблицей в базе
 @Table(name = "recipes")
 public class Recipe {
@@ -44,55 +50,10 @@ public class Recipe {
         this.recipeDescription = recipeDescription;
         this.ingredients = ingredients;
         this.createdAt = LocalDateTime.now();
+
     }
 
-    public String getRecipeDescription() {
-        return recipeDescription;
-    }
 
-    public void setRecipeDescription(String recipeDescription) {
-        this.recipeDescription = recipeDescription;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 
 }
