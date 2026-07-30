@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { addNewRecipe } from "@/shared/services/recipeService";
 import { createRecipeDto } from "../utils/createRecipeDto";
 import { validateRecipe } from "../utils/recipeValidation";
-
+export const MAX_INGREDIENTS = 10;
 import {
     addEmptyIngredient,
     removeIngredientByIndex,
@@ -30,7 +30,6 @@ export default function Form() {
             },
         ]);
 
-    const MAX_INGREDIENTS = 10;
 
     const changeIngredient = (
         index,
