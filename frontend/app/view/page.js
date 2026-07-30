@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import {
     deleteRecipe,
     getAllRecipes,
-} from "../features/services/recipeService";
+} from "../../shared/services/recipeService";
 
-import List from "../features/components/List";
+import List from "./components/list";
 
 const ViewRecipesPage = () => {
     const [recipes, setRecipes] = useState([]);

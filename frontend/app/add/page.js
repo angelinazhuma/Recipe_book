@@ -1,4 +1,4 @@
-import Form from "../features/components/Form";
+import Form from "./components/form";
 
 //just telling show recipeform component
 
