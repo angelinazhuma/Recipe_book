@@ -1,7 +1,7 @@
-import Recipeform from "../features/components/Recipeform";
+import Form from "../features/components/Form";
 
 //just telling show recipeform component
 
 export default function AddRecipePage() {
-    return <Recipeform />
+    return <Form />
 }

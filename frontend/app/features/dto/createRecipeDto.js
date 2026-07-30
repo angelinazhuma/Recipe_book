@@ -1,3 +1,5 @@
+import { createRecipeDto } from "../features/utils/recipeUtils";
+
 export function createRecipeDto(
     name,
     author,
@@ -24,7 +26,7 @@ export function createRecipeDto(
                 // convert the amount from a string to a number
                 amount: Number(ingredient.amount),
 
-                // eemove spaces from the measurement unit
+                // remove spaces from the measurement unit
                 unit: ingredient.unit.trim(),
             })
         ),

@@ -7,9 +7,9 @@ import {
     getAllRecipes,
 } from "../features/services/recipeService";
 
-import RecipeList from "../features/components/RecipeList";
+import List from "../features/components/List";
 
-export default function ViewRecipesPage() {
+const ViewRecipesPage = () => {
     const [recipes, setRecipes] = useState([]);
 
     const loadRecipes = async () => {
@@ -38,9 +38,11 @@ export default function ViewRecipesPage() {
 
     return (
 
-            <RecipeList
+            <List
                 recipes={recipes}
                 onDelete={handleDelete}
         />
     );
 }
+
+export default ViewRecipesPage;

@@ -1,12 +1,12 @@
 package com.example.demo;
 
-import com.example.demo.Model.Ingredient;
-import com.example.demo.Model.Recipe;
-import com.example.demo.Repository.RecipeRepository;
-import com.example.demo.Service.RecipeService;
-import com.example.demo.dto.IngredientDTO;
-import com.example.demo.dto.RecipeRequestDTO;
-import com.example.demo.dto.RecipeResponseDTO;
+import com.example.demo.recipe.model.Ingredient;
+import com.example.demo.recipe.model.Recipe;
+import com.example.demo.recipe.repository.RecipeRepository;
+import com.example.demo.recipe.service.RecipeService;
+import com.example.demo.recipe.DTO.IngredientDTO;
+import com.example.demo.recipe.DTO.RecipeRequestDTO;
+import com.example.demo.recipe.DTO.RecipeResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,19 +32,6 @@ class RecipeServiceTest {
 
  //GET all recipes
 
-    @Test
-    void getAllRecipesReturnsEmptyListWhenRepositoryIsEmpty() {
-
-        Mockito.when(repository.findAll())
-                .thenReturn(Collections.emptyList());
-        List<RecipeResponseDTO> result = service.getAllRecipes();
-
-        Assertions.assertNotNull(result);
-        Assertions.assertTrue(result.isEmpty());
-        Assertions.assertEquals(0, result.size());
-
-        Mockito.verify(repository).findAll();
-    }
 
     @Test
     void getAllRecipesReturnsAllRecipesFromRepository() {

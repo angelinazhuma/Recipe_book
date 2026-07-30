@@ -2,7 +2,7 @@ import {
     fetchAllRecipes,
     postRecipe,
     removeRecipe
-} from "@/app/features/api/recipeapi";
+} from "../api/api";
 
 import {
     transformRecipe,
