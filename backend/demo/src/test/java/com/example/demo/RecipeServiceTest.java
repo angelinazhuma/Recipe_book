@@ -2,8 +2,8 @@ package com.example.demo;
 
 import com.example.demo.recipe.model.Ingredient;
 import com.example.demo.recipe.model.Recipe;
-import com.example.demo.recipe.repository.RecipeRepository;
-import com.example.demo.recipe.service.RecipeService;
+import com.example.demo.recipe.repository.Repository;
+import com.example.demo.recipe.service.Service;
 import com.example.demo.recipe.DTO.IngredientDTO;
 import com.example.demo.recipe.DTO.RecipeRequestDTO;
 import com.example.demo.recipe.DTO.RecipeResponseDTO;
@@ -24,11 +24,11 @@ class RecipeServiceTest {
 
     //fake repository created by mockito
     @Mock
-    private RecipeRepository repository;
+    private Repository repository;
 
 
     @InjectMocks
-    private RecipeService service;
+    private Service service;
 
  //GET all recipes
 

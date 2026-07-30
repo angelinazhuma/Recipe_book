@@ -2,21 +2,20 @@ package com.example.demo.recipe.service;
 
 import com.example.demo.recipe.model.Ingredient;
 import com.example.demo.recipe.model.Recipe;
-import com.example.demo.recipe.repository.RecipeRepository;
+import com.example.demo.recipe.repository.Repository;
 import com.example.demo.recipe.DTO.IngredientDTO;
 import com.example.demo.recipe.DTO.RecipeRequestDTO;
 import com.example.demo.recipe.DTO.RecipeResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class RecipeService {
+@org.springframework.stereotype.Service
+public class Service {
 
     @Autowired
-    private RecipeRepository repository;
+    private Repository repository;
 
     // get all recipes
     public List<RecipeResponseDTO> getAllRecipes() {

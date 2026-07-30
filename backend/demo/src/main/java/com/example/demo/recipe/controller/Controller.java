@@ -1,6 +1,6 @@
 package com.example.demo.recipe.controller;
 
-import com.example.demo.recipe.service.RecipeService;
+import com.example.demo.recipe.service.Service;
 import com.example.demo.recipe.DTO.RecipeRequestDTO;
 import com.example.demo.recipe.DTO.RecipeResponseDTO;
 import jakarta.validation.Valid;
@@ -18,10 +18,10 @@ import java.util.Optional;
         "http://localhost:3000",
         "http://172.17.222.129:3000"
 })
-public class RecipeController {
+public class Controller {
 
     @Autowired // spring automatically makes recipeService object and places it here
-    private RecipeService service;
+    private Service service;
 
     // GET all recipes
     @GetMapping

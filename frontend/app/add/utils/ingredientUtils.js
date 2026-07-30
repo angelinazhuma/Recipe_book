@@ -14,7 +14,9 @@ export function updateIngredientField(
             [field]: value,
         };
     });
-}export function createEmptyIngredient() {
+}
+
+export function createEmptyIngredient() {
     return {
         name: "",
         amount: "",
@@ -27,8 +29,14 @@ export function addEmptyIngredient(ingredients) {
         ...ingredients,
         createEmptyIngredient(),
     ];
-}export function removeIngredientByIndex(ingredients, indexToRemove) {
+}
+
+export function removeIngredientByIndex(
+    ingredients,
+    indexToRemove
+) {
     return ingredients.filter(
-        (_, currentIndex) => currentIndex !== indexToRemove
+        (_, currentIndex) =>
+            currentIndex !== indexToRemove
     );
 }

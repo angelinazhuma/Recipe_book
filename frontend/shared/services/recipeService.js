@@ -7,7 +7,7 @@ import {
 import {
     transformRecipe,
     transformRecipes
-} from "../../app/view/utils/recipeTransformer";
+} from "../utils/recipeTransformer";
 
 // get all recipes from the backend
 export async function getAllRecipes() {
