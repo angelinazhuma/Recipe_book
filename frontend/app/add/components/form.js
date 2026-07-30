@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { addNewRecipe } from "@/shared/services/recipeService";
 import { createRecipeDto } from "../utils/createRecipeDto";
 import { validateRecipe } from "../utils/recipeValidation";
-export const MAX_INGREDIENTS = 10;
 import {
     addEmptyIngredient,
     removeIngredientByIndex,
     updateIngredientField,
 } from "../utils/ingredientUtils";
+import {
+    MAX_INGREDIENTS,
+} from "@/shared/constants/recipeConstants";
 
 export default function Form() {
     const router = useRouter();
